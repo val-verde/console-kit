@@ -1,5 +1,7 @@
 #if os(Linux) || os(Android)
 import Glibc
+#elseif os(Windows)
+import MSVCRT
 #else
 import Darwin.C
 #endif
