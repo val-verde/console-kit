@@ -69,6 +69,10 @@ public final class Terminal: Console {
                 return .init(decoding: [Int8](unsafeUninitializedCapacity: 1024) { $1 = plat_readpassphrase(into: $0) }.map(UInt8.init), as: UTF8.self)
             }
             pass = readpassphrase_str()
+#elseif os(Android)
+            guard var pass = readLine(strippingNewline: true) else {
+                fatalError("Received EOF on stdin; unable to read input. Stopping here.")
+            }
 #elseif os(Windows)
             while pass.count < 32768 { // arbitrary upper bound for sanity
                 let c = _getch()
