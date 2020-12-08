@@ -1,4 +1,4 @@
-#if os(Linux) || os(Android)
+#if os(Linux) || os(Android) || os(Musl)
 import Glibc
 #elseif os(Windows)
 import MSVCRT
