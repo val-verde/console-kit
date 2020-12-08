@@ -1,6 +1,6 @@
 // This implementation is only used on Linux, but we enable building it on macOS in debug for testing purposes.
-#if os(Linux) || (os(macOS) && DEBUG)
-#if os(Linux)
+#if os(Linux) || os(Musl) || (os(macOS) && DEBUG)
+#if os(Linux) || os(Musl)
 import Glibc
 #elseif os(macOS)
 import Darwin
@@ -22,7 +22,7 @@ internal func linux_readpassphrase(_ prompt: UnsafePointer<Int8>, _ buf: UnsafeM
     precondition((flags & 0x08/* RPP_FORCEUPPER */) == 0, "RPP_FORCEUPPER is not supported by this implementation")
     precondition((flags & 0x10/* RPP_SEVENBIT */) == 0, "RPP_SEVENBIT is not supported by this implementation")
     
-    #if os(Linux)
+    #if os(Linux) || os(Musl)
     let TCSASOFT = 0 as Int32
     #endif
     
@@ -50,6 +50,8 @@ internal func linux_readpassphrase(_ prompt: UnsafePointer<Int8>, _ buf: UnsafeM
     sigrecovery.sa_flags = 0
     #if os(macOS)
     sigrecovery.__sigaction_u = .init(__sa_handler: { linux_readpassphrase_signos[$0] += 1 })
+    #elseif os(Musl)
+    sigrecovery.__sa_handler = .init(sa_handler: { linux_readpassphrase_signos[$0] += 1 })
     #elseif os(Linux)
     sigrecovery.__sigaction_handler = .init(sa_handler: { linux_readpassphrase_signos[$0] += 1 })
     #endif

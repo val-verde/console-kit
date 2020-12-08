@@ -1,5 +1,5 @@
 import Dispatch
-#if os(Android) || os(Linux)
+#if os(Android) || os(Linux) || os(Musl)
 import Glibc
 #elseif os(Windows)
 import MSVCRT
