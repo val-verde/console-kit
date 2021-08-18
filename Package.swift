@@ -10,7 +10,7 @@ let package = Package(
         .library(name: "ConsoleKit", targets: ["ConsoleKit"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/val-verde/swift-log.git", .branch("val-verde-mainline")),
+        .package(url: "https://github.com/val-verde/swift-log.git", .branch("val-verde-mainline-next")),
     ],
     targets: [
         .target(name: "ConsoleKit", dependencies: [
